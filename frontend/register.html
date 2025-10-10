@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Register | MacroMunch</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <main class="auth container">
+      <h1>Create Account</h1>
+      <form id="registerForm" class="card form-card">
+        <div id="registerError" class="error" style="display: none;"></div>
+        <label>Name
+          <input type="text" name="name" required />
+        </label>
+        <label>Email
+          <input type="email" name="email" required />
+        </label>
+        <label>Password
+          <input type="password" name="password" minlength="6" required />
+        </label>
+        <button class="btn" type="submit">Register</button>
+      </form>
+      <p>Already have an account? <a href="/MacroMunch/frontend/login.html">Login</a></p>
+    </main>
+    <script src="./js/auth.js"></script>
+  </body>
+  </html>
+
+

@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Portal | MacroMunch</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="/MacroMunch/frontend/index.html">MacroMunch Admin</a>
+        <nav class="nav">
+          <a href="/MacroMunch/frontend/index.html">Home</a>
+          <a href="/MacroMunch/frontend/food-list.html">Foods</a>
+          <span id="adminUserName" class="admin-user-name"></span>
+          <a href="#" id="logoutBtn">Logout</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="admin-layout">
+      <!-- Sidebar Navigation -->
+      <aside class="admin-sidebar">
+        <nav class="admin-nav">
+          <a href="#dashboard" class="admin-nav-item active" data-section="dashboard">
+            <span class="nav-icon">📊</span>
+            <span>Dashboard</span>
+          </a>
+          <a href="#foods" class="admin-nav-item" data-section="foods">
+            <span class="nav-icon">🍽️</span>
+            <span>Manage Foods</span>
+          </a>
+          <a href="#categories" class="admin-nav-item" data-section="categories">
+            <span class="nav-icon">📁</span>
+            <span>Categories</span>
+          </a>
+          <a href="#users" class="admin-nav-item" data-section="users">
+            <span class="nav-icon">👥</span>
+            <span>Manage Users</span>
+          </a>
+          <a href="#orders" class="admin-nav-item" data-section="orders">
+            <span class="nav-icon">🛒</span>
+            <span>Orders</span>
+          </a>
+        </nav>
+      </aside>
+
+      <!-- Main Content Area -->
+      <div class="admin-content">
+        
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="admin-section active">
+          <h1>Dashboard</h1>
+          <p class="section-description">Welcome to the MacroMunch Admin Portal</p>
+          
+          <!-- Stats Cards -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon">👥</div>
+              <div class="stat-content">
+                <div class="stat-label">Total Users</div>
+                <div class="stat-value" id="statUsers">0</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">🍽️</div>
+              <div class="stat-content">
+                <div class="stat-label">Total Foods</div>
+                <div class="stat-value" id="statFoods">0</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">🛒</div>
+              <div class="stat-content">
+                <div class="stat-label">Total Orders</div>
+                <div class="stat-value" id="statOrders">0</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">📁</div>
+              <div class="stat-content">
+                <div class="stat-label">Categories</div>
+                <div class="stat-value" id="statCategories">0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Orders -->
+          <div class="admin-card">
+            <h2>Recent Orders</h2>
+            <div id="recentOrdersContainer" class="table-container"></div>
+          </div>
+        </section>
+
+        <!-- Foods Management Section -->
+        <section id="foods-section" class="admin-section">
+          <div class="section-header">
+            <div>
+              <h1>Manage Foods</h1>
+              <p class="section-description">Add, edit, or remove food items</p>
+            </div>
+            <button class="btn btn-primary" id="addFoodBtn">+ Add New Food</button>
+          </div>
+
+          <div id="foodsTableContainer" class="table-container"></div>
+        </section>
+
+        <!-- Categories Management Section -->
+        <section id="categories-section" class="admin-section">
+          <div class="section-header">
+            <div>
+              <h1>Categories</h1>
+              <p class="section-description">Manage food categories</p>
+            </div>
+            <button class="btn btn-primary" id="addCategoryBtn">+ Add Category</button>
+          </div>
+
+          <div id="categoriesTableContainer" class="table-container"></div>
+        </section>
+
+        <!-- Users Management Section -->
+        <section id="users-section" class="admin-section">
+          <h1>Manage Users</h1>
+          <p class="section-description">View and manage user accounts and permissions</p>
+
+          <div id="usersTableContainer" class="table-container"></div>
+        </section>
+
+        <!-- Orders Section -->
+        <section id="orders-section" class="admin-section">
+          <h1>All Orders</h1>
+          <p class="section-description">View all customer orders</p>
+
+          <div id="ordersTableContainer" class="table-container"></div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Modal for Add/Edit Food -->
+    <div id="foodModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="foodModalTitle">Add New Food</h2>
+          <button class="modal-close" id="closeFoodModal">&times;</button>
+        </div>
+        <form id="foodForm">
+          <input type="hidden" id="foodId" />
+          
+          <div class="form-group">
+            <label for="foodName">Food Name *</label>
+            <input type="text" id="foodName" required />
+          </div>
+
+          <div class="form-group">
+            <label for="foodCategory">Category *</label>
+            <select id="foodCategory" required></select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="foodCalories">Calories *</label>
+              <input type="number" id="foodCalories" min="0" required />
+            </div>
+
+            <div class="form-group">
+              <label for="foodPrice">Price ($) *</label>
+              <input type="number" id="foodPrice" step="0.01" min="0" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="foodProtein">Protein (g) *</label>
+              <input type="number" id="foodProtein" step="0.1" min="0" required />
+            </div>
+
+            <div class="form-group">
+              <label for="foodCarbs">Carbs (g) *</label>
+              <input type="number" id="foodCarbs" step="0.1" min="0" required />
+            </div>
+
+            <div class="form-group">
+              <label for="foodFats">Fats (g) *</label>
+              <input type="number" id="foodFats" step="0.1" min="0" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="foodMicros">Micronutrients (optional)</label>
+            <textarea id="foodMicros" rows="3" placeholder="e.g., Vitamin C: 20mg, Iron: 5mg"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="foodImage">Image URL (optional)</label>
+            <input type="url" id="foodImage" placeholder="https://example.com/image.jpg" />
+            <small class="form-hint">Enter a direct image URL (e.g., from Unsplash)</small>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="cancelFoodBtn">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Food</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal for Add Category -->
+    <div id="categoryModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Add New Category</h2>
+          <button class="modal-close" id="closeCategoryModal">&times;</button>
+        </div>
+        <form id="categoryForm">
+          <div class="form-group">
+            <label for="categoryName">Category Name *</label>
+            <input type="text" id="categoryName" required />
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="cancelCategoryBtn">Cancel</button>
+            <button type="submit" class="btn btn-primary">Add Category</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <small>© <span id="year"></span> MacroMunch Admin Portal</small>
+      </div>
+    </footer>
+
+    <script src="./js/admin.js"></script>
+  </body>
+</html>
+
+
+
