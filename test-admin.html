@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        .info-box {
+            background: #e7f3ff;
+            border: 1px solid #b3d7ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 MacroMunch Admin Dashboard - System Test</h1>
+        
+        <div class="info-box">
+            <strong>📋 This page will test:</strong>
+            <ul>
+                <li>Database connection</li>
+                <li>Admin API endpoints</li>
+                <li>Sample data existence</li>
+                <li>Authentication system</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h3>🎯 Quick Actions</h3>
+            <button onclick="runAllTests()">🚀 Run All Tests</button>
+            <button onclick="window.open('http://localhost/phpmyadmin', '_blank')">📊 Open phpMyAdmin</button>
+            <button onclick="window.open('/MacroMunch/frontend/create-admin.html', '_blank')">👤 Create Admin</button>
+            <button onclick="window.open('/MacroMunch/frontend/admin.html', '_blank')">⚙️ Open Admin Portal</button>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const API_BASE = '/MacroMunch/backend/controllers';
+        
+        async function runTest(name, testFn) {
+            const resultsDiv = document.getElementById('results');
+            const testDiv = document.createElement('div');
+            testDiv.className = 'test-section';
+            testDiv.innerHTML = `
+                <h3>${name}</h3>
+                <div class="test-result pending">
+                    <span class="loading"></span> Testing...
+                </div>
+            `;
+            resultsDiv.appendChild(testDiv);
+
+            try {
+                const result = await testFn();
+                const resultDiv = testDiv.querySelector('.test-result');
+                if (result.success) {
+                    resultDiv.className = 'test-result success';
+                    resultDiv.innerHTML = `✅ ${result.message}`;
+                    if (result.details) {
+                        resultDiv.innerHTML += `<pre>${JSON.stringify(result.details, null, 2)}</pre>`;
+                    }
+                } else {
+                    resultDiv.className = 'test-result error';
+                    resultDiv.innerHTML = `❌ ${result.message}`;
+                }
+            } catch (error) {
+                const resultDiv = testDiv.querySelector('.test-result');
+                resultDiv.className = 'test-result error';
+                resultDiv.innerHTML = `❌ Error: ${error.message}`;
+            }
+        }
+
+        async function testDatabase() {
+            const response = await fetch(`${API_BASE}/testDataController.php`);
+            const data = await response.json();
+            
+            if (data.success) {
+                return {
+                    success: true,
+                    message: `Database connected! Users: ${data.data.users}, Foods: ${data.data.foods}`,
+                    details: data.data
+                };
+            }
+            return { success: false, message: data.message };
+        }
+
+        async function testAdminStats() {
+            const response = await fetch(`${API_BASE}/adminController.php?action=getStats`, {
+                credentials: 'include'
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                return {
+                    success: true,
+                    message: 'Admin stats API working!',
+                    details: {
+                        'Total Users': data.data.totalUsers,
+                        'Total Foods': data.data.totalFoods,
+                        'Total Orders': data.data.totalOrders,
+                        'Total Categories': data.data.totalCategories
+                    }
+                };
+            }
+            return { success: false, message: data.message || 'Stats API failed (login required)' };
+        }
+
+        async function testFoodsAPI() {
+            const response = await fetch(`${API_BASE}/adminController.php?action=getAllFoods`, {
+                credentials: 'include'
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                return {
+                    success: true,
+                    message: `Foods API working! Found ${data.data.length} food items`,
+                    details: data.data.slice(0, 3).map(f => ({
+                        name: f.name,
+                        category: f.category_name,
+                        price: `$${f.price}`
+                    }))
+                };
+            }
+            return { success: false, message: data.message || 'Foods API failed (login required)' };
+        }
+
+        async function testCategoriesAPI() {
+            const response = await fetch(`${API_BASE}/adminController.php?action=getAllCategories`, {
+                credentials: 'include'
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                return {
+                    success: true,
+                    message: `Categories API working! Found ${data.data.length} categories`,
+                    details: data.data.map(c => c.name)
+                };
+            }
+            return { success: false, message: data.message || 'Categories API failed (login required)' };
+        }
+
+        async function runAllTests() {
+            document.getElementById('results').innerHTML = '';
+            
+            await runTest('1️⃣ Database Connection Test', testDatabase);
+            await runTest('2️⃣ Admin Stats API Test', testAdminStats);
+            await runTest('3️⃣ Foods API Test', testFoodsAPI);
+            await runTest('4️⃣ Categories API Test', testCategoriesAPI);
+            
+            // Add final summary
+            const resultsDiv = document.getElementById('results');
+            const summaryDiv = document.createElement('div');
+            summaryDiv.className = 'test-section';
+            summaryDiv.style.background = '#e7f3ff';
+            summaryDiv.innerHTML = `
+                <h3>📝 Test Summary</h3>
+                <div class="info-box">
+                    <strong>✅ If Test 1 passed:</strong> Database is connected and has data<br>
+                    <strong>⚠️ If Tests 2-4 failed with "login required":</strong> This is normal - you need to login as admin first<br><br>
+                    <strong>📌 Next Steps:</strong><br>
+                    1. If database test failed: Import schema.sql in phpMyAdmin<br>
+                    2. Create admin account using "Create Admin" button above<br>
+                    3. Login at: <a href="/MacroMunch/frontend/login.html" target="_blank">Login Page</a><br>
+                    4. Access admin portal and verify dashboard shows correct stats
+                </div>
+            `;
+            resultsDiv.appendChild(summaryDiv);
+        }
+
+        // Run tests on page load
+        window.addEventListener('load', () => {
+            runAllTests();
+        });
+    </script>
+</body>
+</html>

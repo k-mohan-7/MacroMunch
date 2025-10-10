@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Dashboard | MacroMunch</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="/MacroMunch/frontend/index.html">MacroMunch</a>
+        <nav class="nav">
+          <a href="/MacroMunch/frontend/food-list.html">Foods</a>
+          <a href="/MacroMunch/frontend/login.html" id="logoutLink">Logout</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <h1>Admin Dashboard</h1>
+      <section class="grid admin-grid">
+        <div class="card">
+          <h2>Foods</h2>
+          <div class="stack">
+            <button class="btn" id="btnAddFood">Add Food</button>
+            <div id="adminFoods"></div>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Categories</h2>
+          <div class="stack">
+            <form id="categoryForm" class="inline-form">
+              <input type="text" id="categoryName" placeholder="New category name" required />
+              <button class="btn" type="submit">Add</button>
+            </form>
+            <div id="adminCategories"></div>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Orders</h2>
+          <div id="adminOrders"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./js/admin.js"></script>
+  </body>
+  </html>
+
+

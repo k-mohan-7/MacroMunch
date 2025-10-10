@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MacroMunch | Fitness Bakery</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="/MacroMunch/frontend/index.html">MacroMunch</a>
+        <nav class="nav">
+          <a href="/MacroMunch/frontend/food-list.html">Foods</a>
+          <a href="/MacroMunch/frontend/cart.html" id="cartLink">Cart</a>
+          <a href="/MacroMunch/frontend/login.html" id="authLink">Login</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="hero">
+        <h1>Fuel your goals. Love your bites.</h1>
+        <p>Modern, nutritious, and delicious bakes tailored to your macros.</p>
+        <div class="hero-cta">
+          <a class="btn" href="/MacroMunch/frontend/food-list.html">Browse Foods</a>
+        </div>
+      </section>
+
+      <section class="featured-section">
+        <h2>Featured Products</h2>
+        <p class="section-subtitle">Our most popular items this week</p>
+        <div class="grid" id="featuredGrid"></div>
+        <div class="text-center" style="margin-top: 30px;">
+          <a href="/MacroMunch/frontend/food-list.html" class="btn btn-primary">View All Products</a>
+        </div>
+      </section>
+
+      <section class="categories">
+        <h2>Shop by Category</h2>
+        <div class="grid categories-grid">
+          <a class="card category-card" href="/MacroMunch/frontend/food-list.html?category=snacks">
+            <div class="category-icon">🍿</div>
+            <h3>Snacks</h3>
+            <p>Protein-packed quick bites.</p>
+          </a>
+          <a class="card category-card" href="/MacroMunch/frontend/food-list.html?category=beverages">
+            <div class="category-icon">🥤</div>
+            <h3>Beverages</h3>
+            <p>Low-cal, high-flavor sips.</p>
+          </a>
+          <a class="card category-card" href="/MacroMunch/frontend/food-list.html?category=meals">
+            <div class="category-icon">🍽️</div>
+            <h3>Meals</h3>
+            <p>Balanced plates for performance.</p>
+          </a>
+          <a class="card category-card" href="/MacroMunch/frontend/food-list.html?category=bars">
+            <div class="category-icon">🍫</div>
+            <h3>Bars</h3>
+            <p>Energy bars for on-the-go fuel.</p>
+          </a>
+          <a class="card category-card" href="/MacroMunch/frontend/food-list.html?category=desserts">
+            <div class="category-icon">🍰</div>
+            <h3>Desserts</h3>
+            <p>Sweet without the setback.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="features-section">
+        <h2>Why Choose MacroMunch?</h2>
+        <div class="grid features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">💪</div>
+            <h3>Macro-Optimized</h3>
+            <p>Every meal is carefully balanced for your fitness goals</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🌱</div>
+            <h3>Fresh Ingredients</h3>
+            <p>We use only the highest quality, natural ingredients</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🚀</div>
+            <h3>Fast Delivery</h3>
+            <p>Quick checkout and speedy delivery to your door</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">😋</div>
+            <h3>Delicious Taste</h3>
+            <p>Healthy food that actually tastes amazing</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <small>© <span id="year"></span> MacroMunch</small>
+        <nav>
+          <a href="/MacroMunch/frontend/admin.html">Admin</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script src="./js/app.js"></script>
+    <script src="./js/home.js"></script>
+  </body>
+</html>
